@@ -1,0 +1,15 @@
+{
+  "name": "trama-api",
+  "version": "1.0.0",
+  "description": "API Trama app",
+  "main": "index.js",
+  "author": "Rafael Vieira",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
