@@ -16,6 +16,6 @@ app.use('/subject', subjectRouter)
 app.use('/category', categoryRouter)
 app.use('/todo', todoRouter)
 
-app.listen(3000, () => {
-  console.log('API listening at port 3000...')
+app.listen(process.env.PORT, () => {
+  console.log(`API listening at port ${process.env.PORT}...`)
 })
