@@ -1,4 +1,7 @@
 import pg from 'pg'
+import * as dotenv from 'dotenv'
+
+dotenv.config()
 
 const client = new pg.Client({
   host: process.env.DB_HOST,
