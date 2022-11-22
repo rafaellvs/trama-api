@@ -6,4 +6,12 @@ overrides: []
 parserOptions:
   ecmaVersion: latest
   sourceType: module
-rules: {}
+rules: {
+  comma-dangle: ['error', {
+    'objects': 'always-multiline',
+    'arrays': 'always-multiline',
+    'imports': 'always-multiline',
+    'exports': 'always-multiline',
+    'functions': 'only-multiline',
+  }],
+}
