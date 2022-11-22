@@ -10,50 +10,45 @@ import {
 
 const router = Router()
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   const { id } = req.params
 
-  if (typeof id !== 'number') return res.status(400).send('Id must be a number.')
-
-  const category = getById(id)
+  const category = await getById(id)
 
   return res.send(category)
 })
 
-router.get('/', (req, res) => {
-  const categories = getAll()
+router.get('/', async (req, res) => {
+  const categories = await getAll()
 
   return res.send(categories)
 })
 
-router.post('/create', (req, res) => {
+router.post('/create', async (req, res) => {
   const { name, description } = req.body
 
   if (!name) return res.status(400).send('Name is required.')
 
-  const category = create(name, description)
+  const category = await create(name, description)
 
   return res.send(category)
 })
 
-router.patch('/update/:id', (req, res) => {
+router.patch('/update/:id', async (req, res) => {
   const { id } = req.params
   const { name, description } = req.body
 
-  if (typeof id !== 'number') return res.status(400).send('Id must be a number.')
   if (!name) return res.status(400).send('Name is required.')
 
-  const category = update(id, name, description)
+  const category = await update(id, name, description)
 
   return res.send(category)
 })
 
-router.delete('/remove/:id', (req, res) => {
+router.delete('/remove/:id', async (req, res) => {
   const { id } = req.params
 
-  if (typeof id !== 'number') return res.status(400).send('Id must be a number.')
-
-  const category = remove(id)
+  const category = await remove(id)
 
   return res.send(category)
 })
