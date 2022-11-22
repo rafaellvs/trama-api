@@ -11,4 +11,6 @@ const pool = new pg.Pool({
   password: process.env.DB_PASSWORD,
 })
 
+pool.connect()
+
 export default pool
