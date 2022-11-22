@@ -22,7 +22,8 @@ const getAll = async () => {
 const create = async (name, description) => {
   const query = `
     INSERT INTO category(name, description) 
-    VALUES(${name}, ${description});
+    VALUES('${name}', '${description}')
+    RETURNING *;
   `
   const response = await pool.query(query)
 
@@ -32,8 +33,9 @@ const create = async (name, description) => {
 const update = async (id, name, description) => {
   const query = `
     UPDATE category 
-    SET ${name && `name=${name}`}, ${description && `description=${description}`} 
-    WHERE id=${id};
+    SET ${name && `name='${name}'`}, ${description && `description='${description}'`} 
+    WHERE id=${id}
+    RETURNING *;
   `
   const response = await pool.query(query)
 
@@ -42,7 +44,9 @@ const update = async (id, name, description) => {
 
 const remove = async (id) => {
   const query = `
-    DELETE FROM category WHERE id=${id};
+    DELETE FROM category 
+    WHERE id=${id}
+    RETURNING *;
   `
   const response = await pool.query(query)
 
