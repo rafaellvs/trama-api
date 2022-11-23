@@ -38,8 +38,6 @@ router.patch('/update/:id', async (req, res) => {
   const { id } = req.params
   const { name, description } = req.body
 
-  if (!name) return res.status(400).send('Name is required.')
-
   const category = await update(id, name, description)
 
   return res.send(category)
