@@ -1,4 +1,5 @@
 import pool from '../connection.js'
+import { formatSetQueryParams } from '../helpers/utils.js'
 
 const getById = async (id) => {
   const query = `
@@ -33,7 +34,10 @@ const create = async (name, description) => {
 const update = async (id, name, description) => {
   const query = `
     UPDATE category 
-    SET ${name && `name='${name}'`}, ${description && `description='${description}'`} 
+    SET ${formatSetQueryParams([
+      { name: 'name', content: name },
+      { name: 'description', content: description },
+    ])}
     WHERE id=${id}
     RETURNING *;
   `
