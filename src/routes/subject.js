@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import validator from 'express-validator'
 
 import {
   getById,
@@ -7,49 +8,80 @@ import {
   update,
   remove,
 } from '../controller/subject.js'
+import { validateAndParseError } from '../helpers/errors.js'
 
 const router = Router()
+const { param, body } = validator
 
-router.get('/:id', async (req, res) => {
-  const { id } = req.params
+router.get(
+  '/:id',
+  param('id', 'Param "id" must be an integer.').isNumeric(),
+  async (req, res, next) => {
+    const { id } = req.params
 
-  const subject = await getById(id)
+    const error = validateAndParseError(req)
+    if (error) return next(error)
 
-  return res.send(subject)
-})
+    const subject = await getById(id)
+      .catch(err => next(err))
 
-router.get('/', async (req, res) => {
-  const subjects = await getAll()
+    return res.send(subject)
+  })
 
-  return res.send(subjects)
-})
+router.get(
+  '/',
+  async (req, res, next) => {
+    const subjects = await getAll()
+      .catch(err => next(err))
 
-router.post('/create', async (req, res) => {
-  const { name, description, categoryId } = req.body
+    return res.send(subjects)
+  })
 
-  if (!name) return res.status(400).send('name is required.')
-  if (!categoryId) return res.status(400).send('categoryId is required.')
+router.post(
+  '/create',
+  body('name', 'Field "name" is required.').exists(),
+  body('categoryId', 'Field "categoryId is required.').exists(),
+  async (req, res, next) => {
+    const { name, description, categoryId } = req.body
 
-  const subject = await create(name, description, categoryId)
+    const error = validateAndParseError(req)
+    if (error) return next(error)
 
-  return res.send(subject)
-})
+    const subject = await create(name, description, categoryId)
+      .catch(err => next(err))
 
-router.patch('/update/:id', async (req, res) => {
-  const { id } = req.params
-  const { name, description, categoryId } = req.body
+    return res.send(subject)
+  })
 
-  const response = await update(id, name, description, categoryId)
+router.patch(
+  '/update/:id',
+  param('id', 'Param "id" must be an integer.').isNumeric(),
+  async (req, res, next) => {
+    const { id } = req.params
+    const { name, description, categoryId } = req.body
 
-  return res.send(response)
-})
+    const error = validateAndParseError(req)
+    if (error) return next(error)
 
-router.delete('/remove/:id', async (req, res) => {
-  const { id } = req.params
+    const response = await update(id, name, description, categoryId)
+      .catch(err => next(err))
 
-  const response = await remove(id)
+    return res.send(response)
+  })
 
-  return res.send(response)
-})
+router.delete(
+  '/remove/:id',
+  param('id', 'Param "id" must be an integer.').isNumeric(),
+  async (req, res, next) => {
+    const { id } = req.params
+
+    const error = validateAndParseError(req)
+    if (error) return next(error)
+
+    const response = await remove(id)
+      .catch(err => next(err))
+
+    return res.send(response)
+  })
 
 export default router

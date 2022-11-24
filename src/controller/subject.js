@@ -1,4 +1,4 @@
-import pool from '../connection.js'
+import pool from '../helpers/db-connection.js'
 import { formatSetQueryParams } from '../helpers/utils.js'
 
 const getById = async (id) => {
@@ -11,6 +11,7 @@ const getById = async (id) => {
     WHERE subject_id=${id};
   `
   const responseSubject = await pool.query(querySubject)
+  if (!responseSubject.rows.length) return []
   const responseRefs = await pool.query(queryRefs)
 
   const response = {
@@ -29,6 +30,7 @@ const getAll = async () => {
     SELECT * FROM refs;
   `
   const responseSubject = await pool.query(querySubject)
+  if (!responseSubject.rows.length) return []
   const responseRefs = await pool.query(queryRefs)
 
   const response = responseSubject.rows.map(subject => {
