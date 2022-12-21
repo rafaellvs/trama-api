@@ -1,5 +1,6 @@
 import express from 'express'
 import * as dotenv from 'dotenv'
+import cors from 'cors'
 
 import subjectRouter from './routes/subject.js'
 import categoryRouter from './routes/category.js'
@@ -11,6 +12,7 @@ dotenv.config()
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 
 app.use('/subject', subjectRouter)
 app.use('/category', categoryRouter)
