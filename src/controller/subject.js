@@ -1,5 +1,5 @@
 import pool from '../helpers/db-connection.js'
-import { formatSetQueryParams } from '../helpers/utils.js'
+import { formatSetQueryParams } from '../utils/index.js'
 
 const getById = async (id) => {
   const querySubject = `
