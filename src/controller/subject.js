@@ -53,7 +53,7 @@ const create = async (name, description, category_id) => {
   `
   const response = await pool.query(query)
 
-  return response.rows
+  return response.rows[0]
 }
 
 const update = async (id, name, description, category_id) => {
@@ -69,7 +69,7 @@ const update = async (id, name, description, category_id) => {
   `
   const response = await pool.query(query)
 
-  return response.rows
+  return response.rows[0]
 }
 
 const remove = async (id) => {
@@ -80,7 +80,7 @@ const remove = async (id) => {
   `
   const response = await pool.query(query)
 
-  return response.rows
+  return response.rows[0]
 }
 
 export {

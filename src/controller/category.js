@@ -7,8 +7,9 @@ const getById = async (id) => {
     WHERE id=${id};
   `
   const response = await pool.query(query)
+  console.log(response)
 
-  return response.rows
+  return response.rows[0]
 }
 
 const getAll = async () => {
@@ -28,7 +29,7 @@ const create = async (name, description) => {
   `
   const response = await pool.query(query)
 
-  return response.rows
+  return response.rows[0]
 }
 
 const update = async (id, name, description) => {
@@ -43,7 +44,7 @@ const update = async (id, name, description) => {
   `
   const response = await pool.query(query)
 
-  return response.rows
+  return response.rows[0]
 }
 
 const remove = async (id) => {
@@ -54,7 +55,7 @@ const remove = async (id) => {
   `
   const response = await pool.query(query)
 
-  return response.rows
+  return response.rows[0]
 }
 
 export {
