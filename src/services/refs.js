@@ -1,9 +1,9 @@
-import pool from '../helpers/db-connection.js'
+import { pool } from './_db-connection.js'
 import { formatSetQueryParams } from '../utils/index.js'
 
 const getById = async (id) => {
   const query = `
-    SELECT * FROM category 
+    SELECT * FROM refs
     WHERE id=${id};
   `
   const response = await pool.query(query)
@@ -13,17 +13,18 @@ const getById = async (id) => {
 
 const getAll = async () => {
   const query = `
-    SELECT * FROM category;
+    SELECT * FROM refs;
   `
+
   const response = await pool.query(query)
 
   return response.rows
 }
 
-const create = async (name, description) => {
+const create = async (content, subject_id) => {
   const query = `
-    INSERT INTO category(name, description) 
-    VALUES('${name}', '${description}')
+    INSERT INTO refs(content, subject_id)
+    VALUES('${content}', '${subject_id}')
     RETURNING *;
   `
   const response = await pool.query(query)
@@ -31,12 +32,12 @@ const create = async (name, description) => {
   return response.rows[0]
 }
 
-const update = async (id, name, description) => {
+const update = async (id, content, subject_id) => {
   const query = `
-    UPDATE category 
+    UPDATE refs
     SET ${formatSetQueryParams([
-      { name: 'name', content: name },
-      { name: 'description', content: description },
+      { name: 'content', content },
+      { name: 'subject_id', content: subject_id },
     ])}
     WHERE id=${id}
     RETURNING *;
@@ -48,7 +49,7 @@ const update = async (id, name, description) => {
 
 const remove = async (id) => {
   const query = `
-    DELETE FROM category 
+    DELETE FROM refs
     WHERE id=${id}
     RETURNING *;
   `
