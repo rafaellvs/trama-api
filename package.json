@@ -7,8 +7,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "./node_modules/nodemon/bin/nodemon.js src/index.js"
+    "start": "node src/server.js",
+    "dev": "./node_modules/nodemon/bin/nodemon.js src/server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
