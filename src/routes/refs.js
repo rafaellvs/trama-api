@@ -41,14 +41,14 @@ router.get(
 router.post(
   '/create',
   body('content', 'Field "content" is required.').exists(),
-  body('subjectId', 'Field "subjectId" is required.').exists(),
+  body('subject_id', 'Field "subject_id" is required.').exists(),
   async (req, res, next) => {
-    const { content, subjectId } = req.body
+    const { content, subject_id } = req.body
 
     const error = validateAndParseError(req)
     if (error) return next(error)
 
-    const ref = await create(content, subjectId)
+    const ref = await create(content, subject_id)
       .catch(err => next(err))
 
     return res.send(ref)
@@ -59,12 +59,12 @@ router.patch(
   param('id', 'Param "id" must be an integer.').isNumeric(),
   async (req, res, next) => {
     const { id } = req.params
-    const { content, subjectId } = req.body
+    const { content, subject_id } = req.body
 
     const error = validateAndParseError(req)
     if (error) return next(error)
 
-    const ref = await update(id, content, subjectId)
+    const ref = await update(id, content, subject_id)
       .catch(err => next(err))
 
     return res.send(ref)
