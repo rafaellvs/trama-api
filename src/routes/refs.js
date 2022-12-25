@@ -9,7 +9,7 @@ import {
   create,
   update,
   remove,
-} from '../controller/refs.js'
+} from '../services/refs.js'
 
 const router = Router()
 const { param, body } = validator
