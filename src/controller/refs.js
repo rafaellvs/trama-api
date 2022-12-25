@@ -21,10 +21,10 @@ const getAll = async () => {
   return response.rows
 }
 
-const create = async (content, subjectId) => {
+const create = async (content, subject_id) => {
   const query = `
     INSERT INTO refs(content, subject_id)
-    VALUES('${content}', '${subjectId}')
+    VALUES('${content}', '${subject_id}')
     RETURNING *;
   `
   const response = await pool.query(query)
@@ -32,12 +32,12 @@ const create = async (content, subjectId) => {
   return response.rows
 }
 
-const update = async (id, content, subjectId) => {
+const update = async (id, content, subject_id) => {
   const query = `
     UPDATE refs
     SET ${formatSetQueryParams([
       { name: 'content', content },
-      { name: 'subject_id', content: subjectId },
+      { name: 'subject_id', content: subject_id },
     ])}
     WHERE id=${id}
     RETURNING *;
