@@ -18,11 +18,11 @@ app.use('/subject', subjectRouter)
 app.use('/category', categoryRouter)
 app.use('/refs', refsRouter)
 
-app.use(errorHandler)
-
-app.get('*', (req, res) => {
-  res.status(404).send('Route not found.')
+app.all('*', (req, res, next) => {
+  return next(new Error('404'))
 })
+
+app.use(errorHandler)
 
 app.listen(process.env.PORT, () => {
   console.log(`API listening at port ${process.env.PORT}...`)
