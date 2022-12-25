@@ -7,7 +7,7 @@ import categoryRouter from './routes/category.js'
 import refsRouter from './routes/refs.js'
 import notFoundRouter from './routes/404.js'
 
-import { errorHandler } from './helpers/errors.js'
+import { errorMiddleware } from './middleware/error.js'
 
 dotenv.config()
 const app = express()
@@ -20,6 +20,6 @@ app.use('/category', categoryRouter)
 app.use('/refs', refsRouter)
 app.use(notFoundRouter)
 
-app.use(errorHandler)
+app.use(errorMiddleware)
 
 export default app
