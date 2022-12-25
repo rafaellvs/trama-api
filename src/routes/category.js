@@ -16,7 +16,8 @@ const { param, body } = validator
 
 router.get(
   '/:id',
-  param('id', 'Param "id" must be an integer.').isNumeric(),
+  param('id')
+    .isNumeric().withMessage('Param "id" must be an integer.'),
   async (req, res, next) => {
     const { id } = req.params
 
@@ -25,6 +26,8 @@ router.get(
 
     const category = await getById(id)
       .catch(err => next(err))
+
+    if (!category) return next(new Error('404'))
 
     return res.send(category)
   })
@@ -40,7 +43,8 @@ router.get(
 
 router.post(
   '/create',
-  body('name', 'Field "name" is required.').exists(),
+  body('name')
+    .exists().withMessage('Field "name" is required.'),
   async (req, res, next) => {
     const { name, description } = req.body
 
@@ -55,7 +59,8 @@ router.post(
 
 router.patch(
   '/update/:id',
-  param('id', 'Param "id" must be an integer.').isNumeric(),
+  param('id')
+    .isNumeric().withMessage('Param "id" must be an integer.'),
   async (req, res, next) => {
     const { id } = req.params
     const { name, description } = req.body
@@ -66,12 +71,15 @@ router.patch(
     const category = await update(id, name, description)
       .catch(err => next(err))
 
+    if (!category) return next(new Error('404'))
+
     return res.send(category)
   })
 
 router.delete(
   '/remove/:id',
-  param('id', 'Param "id" must be an integer.').isNumeric(),
+  param('id')
+    .isNumeric().withMessage('Param "id" must be an integer.'),
   async (req, res, next) => {
     const { id } = req.params
 
@@ -80,6 +88,8 @@ router.delete(
 
     const category = await remove(id)
       .catch(err => next(err))
+
+    if (!category) return next(new Error('404'))
 
     return res.send(category)
   })

@@ -7,7 +7,6 @@ const getById = async (id) => {
     WHERE id=${id};
   `
   const response = await pool.query(query)
-  console.log(response)
 
   return response.rows[0]
 }

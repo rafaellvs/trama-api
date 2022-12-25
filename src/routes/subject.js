@@ -15,7 +15,8 @@ const { param, body } = validator
 
 router.get(
   '/:id',
-  param('id', 'Param "id" must be an integer.').isNumeric(),
+  param('id')
+    .isNumeric().withMessage('Param "id" must be an integer.'),
   async (req, res, next) => {
     const { id } = req.params
 
@@ -24,6 +25,8 @@ router.get(
 
     const subject = await getById(id)
       .catch(err => next(err))
+
+    if (!subject) return next(new Error('404'))
 
     return res.send(subject)
   })
@@ -39,8 +42,11 @@ router.get(
 
 router.post(
   '/create',
-  body('name', 'Field "name" is required.').exists(),
-  body('category_id', 'Field "category_id" is required.').exists(),
+  body('name')
+    .exists().withMessage('Field "name" is required.'),
+  body('category_id')
+    .exists().withMessage('Field "category_id" is required.')
+    .isNumeric().withMessage('Field "category_id" must be an integer.'),
   async (req, res, next) => {
     const { name, description, category_id } = req.body
 
@@ -50,12 +56,15 @@ router.post(
     const subject = await create(name, description, category_id)
       .catch(err => next(err))
 
+    if (!subject) return next(new Error('404'))
+
     return res.send(subject)
   })
 
 router.patch(
   '/update/:id',
-  param('id', 'Param "id" must be an integer.').isNumeric(),
+  param('id')
+    .isNumeric().withMessage('Field "id" must be an integer.'),
   async (req, res, next) => {
     const { id } = req.params
     const { name, description, category_id } = req.body
@@ -63,25 +72,30 @@ router.patch(
     const error = validateAndParseError(req)
     if (error) return next(error)
 
-    const response = await update(id, name, description, category_id)
+    const subject = await update(id, name, description, category_id)
       .catch(err => next(err))
 
-    return res.send(response)
+    if (!subject) return next(new Error('404'))
+
+    return res.send(subject)
   })
 
 router.delete(
   '/remove/:id',
-  param('id', 'Param "id" must be an integer.').isNumeric(),
+  param('id')
+    .isNumeric().withMessage('Param "id" must be an integer.'),
   async (req, res, next) => {
     const { id } = req.params
 
     const error = validateAndParseError(req)
     if (error) return next(error)
 
-    const response = await remove(id)
+    const subject = await remove(id)
       .catch(err => next(err))
 
-    return res.send(response)
+    if (!subject) return next(new Error('404'))
+
+    return res.send(subject)
   })
 
 export default router
