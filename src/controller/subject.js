@@ -11,7 +11,7 @@ const getById = async (id) => {
     WHERE subject_id=${id};
   `
   const responseSubject = await pool.query(querySubject)
-  if (!responseSubject.rows.length) return []
+  if (!responseSubject.rows.length) return undefined
   const responseRefs = await pool.query(queryRefs)
 
   const response = {

@@ -16,7 +16,8 @@ const { param, body } = validator
 
 router.get(
   '/:id',
-  param('id', 'Param "id" must be an integer.').isNumeric(),
+  param('id')
+    .isNumeric().withMessage('Param "id" must be an integer.'),
   async (req, res, next) => {
     const { id } = req.params
 
@@ -25,6 +26,8 @@ router.get(
 
     const ref = await getById(id)
       .catch(err => next(err))
+
+    if (!ref) return next(new Error('404'))
 
     return res.send(ref)
   })
@@ -40,8 +43,11 @@ router.get(
 
 router.post(
   '/create',
-  body('content', 'Field "content" is required.').exists(),
-  body('subject_id', 'Field "subject_id" is required.').exists(),
+  body('content')
+    .exists().withMessage('Field "content" is required.'),
+  body('subject_id')
+    .exists().withMessage('Field "subject_id" is required.')
+    .isNumeric().withMessage('Field "subject_id" must be an integer.'),
   async (req, res, next) => {
     const { content, subject_id } = req.body
 
@@ -56,7 +62,8 @@ router.post(
 
 router.patch(
   '/update/:id',
-  param('id', 'Param "id" must be an integer.').isNumeric(),
+  param('id')
+    .isNumeric().withMessage('Param "id" must be an integer.'),
   async (req, res, next) => {
     const { id } = req.params
     const { content, subject_id } = req.body
@@ -67,12 +74,15 @@ router.patch(
     const ref = await update(id, content, subject_id)
       .catch(err => next(err))
 
+    if (!ref) return next(new Error('404'))
+
     return res.send(ref)
   })
 
 router.delete(
   '/remove/:id',
-  param('id', 'Param "id" must be an integer.').isNumeric(),
+  param('id')
+    .isNumeric().withMessage('Param "id" must be an integer.'),
   async (req, res, next) => {
     const { id } = req.params
 
@@ -81,6 +91,8 @@ router.delete(
 
     const ref = await remove(id)
       .catch(err => next(err))
+
+    if (!ref) return next(new Error('404'))
 
     return res.send(ref)
   })
