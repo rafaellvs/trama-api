@@ -7,7 +7,7 @@ import categoryRouter from './routes/category.js'
 import refsRouter from './routes/refs.js'
 import notFoundRouter from './routes/404.js'
 
-import { errorMiddleware } from './middleware/error.js'
+import { errorMiddleware } from './middlewares/error.js'
 
 dotenv.config()
 const app = express()
