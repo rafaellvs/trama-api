@@ -8,7 +8,7 @@ import {
   update,
   remove,
 } from '../controller/subject.js'
-import { validateAndParseError } from '../helpers/errors.js'
+import { validateReqParams } from '../utils/validation.js'
 
 const router = Router()
 const { param, body } = validator
@@ -20,7 +20,7 @@ router.get(
   async (req, res, next) => {
     const { id } = req.params
 
-    const error = validateAndParseError(req)
+    const error = validateReqParams(req)
     if (error) return next(error)
 
     const subject = await getById(id)
@@ -50,7 +50,7 @@ router.post(
   async (req, res, next) => {
     const { name, description, category_id } = req.body
 
-    const error = validateAndParseError(req)
+    const error = validateReqParams(req)
     if (error) return next(error)
 
     const subject = await create(name, description, category_id)
@@ -69,7 +69,7 @@ router.patch(
     const { id } = req.params
     const { name, description, category_id } = req.body
 
-    const error = validateAndParseError(req)
+    const error = validateReqParams(req)
     if (error) return next(error)
 
     const subject = await update(id, name, description, category_id)
@@ -87,7 +87,7 @@ router.delete(
   async (req, res, next) => {
     const { id } = req.params
 
-    const error = validateAndParseError(req)
+    const error = validateReqParams(req)
     if (error) return next(error)
 
     const subject = await remove(id)

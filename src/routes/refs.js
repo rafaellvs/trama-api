@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import validator from 'express-validator'
 
-import { validateAndParseError } from '../helpers/errors.js'
+import { validateReqParams } from '../utils/validation.js'
 
 import {
   getById,
@@ -21,7 +21,7 @@ router.get(
   async (req, res, next) => {
     const { id } = req.params
 
-    const error = validateAndParseError(req)
+    const error = validateReqParams(req)
     if (error) return next(error)
 
     const ref = await getById(id)
@@ -51,7 +51,7 @@ router.post(
   async (req, res, next) => {
     const { content, subject_id } = req.body
 
-    const error = validateAndParseError(req)
+    const error = validateReqParams(req)
     if (error) return next(error)
 
     const ref = await create(content, subject_id)
@@ -68,7 +68,7 @@ router.patch(
     const { id } = req.params
     const { content, subject_id } = req.body
 
-    const error = validateAndParseError(req)
+    const error = validateReqParams(req)
     if (error) return next(error)
 
     const ref = await update(id, content, subject_id)
@@ -86,7 +86,7 @@ router.delete(
   async (req, res, next) => {
     const { id } = req.params
 
-    const error = validateAndParseError(req)
+    const error = validateReqParams(req)
     if (error) return next(error)
 
     const ref = await remove(id)
