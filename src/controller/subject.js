@@ -45,10 +45,10 @@ const getAll = async () => {
   return response
 }
 
-const create = async (name, description, categoryId) => {
+const create = async (name, description, category_id) => {
   const query = `
     INSERT INTO subject(name, description, category_id) 
-    VALUES('${name}', '${description}', ${categoryId})
+    VALUES('${name}', '${description}', ${category_id})
     RETURNING *;
   `
   const response = await pool.query(query)
@@ -56,13 +56,13 @@ const create = async (name, description, categoryId) => {
   return response.rows
 }
 
-const update = async (id, name, description, categoryId) => {
+const update = async (id, name, description, category_id) => {
   const query = `
     UPDATE subject 
     SET ${formatSetQueryParams([
       { name: 'name', content: name },
       { name: 'description', content: description },
-      { name: 'category_id', content: categoryId },
+      { name: 'category_id', content: category_id },
     ])}
     WHERE id=${id}
     RETURNING *;
