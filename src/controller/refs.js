@@ -8,7 +8,7 @@ const getById = async (id) => {
   `
   const response = await pool.query(query)
 
-  return response.rows
+  return response.rows[0]
 }
 
 const getAll = async () => {
@@ -29,7 +29,7 @@ const create = async (content, subject_id) => {
   `
   const response = await pool.query(query)
 
-  return response.rows
+  return response.rows[0]
 }
 
 const update = async (id, content, subject_id) => {
@@ -44,7 +44,7 @@ const update = async (id, content, subject_id) => {
   `
   const response = await pool.query(query)
 
-  return response.rows
+  return response.rows[0]
 }
 
 const remove = async (id) => {
@@ -55,7 +55,7 @@ const remove = async (id) => {
   `
   const response = await pool.query(query)
 
-  return response.rows
+  return response.rows[0]
 }
 
 export {
