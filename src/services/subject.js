@@ -12,7 +12,7 @@ const getById = async (id) => {
 
 const getAll = async () => {
   const query = `
-    SELECT * FROM subject;
+  SELECT * FROM subject;
   `
   const response = await pool.query(query)
   return response.rows
@@ -53,10 +53,21 @@ const remove = async (id) => {
   return response.rows[0]
 }
 
+const getRefsBySubjectId = async (id) => {
+  const query = `
+    SELECT * FROM refs
+    WHERE subject_id=${id};
+  `
+  const response = await pool.query(query)
+
+  return response.rows
+}
+
 export {
   getById,
   getAll,
   create,
   update,
   remove,
+  getRefsBySubjectId,
 }

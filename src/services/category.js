@@ -57,10 +57,21 @@ const remove = async (id) => {
   return response.rows[0]
 }
 
+const getSubjectsByCategoryId = async (id) => {
+  const query = `
+    SELECT * FROM subject
+    WHERE category_id=${id};
+  `
+  const response = await pool.query(query)
+
+  return response.rows
+}
+
 export {
   getById,
   getAll,
   create,
   update,
   remove,
+  getSubjectsByCategoryId,
 }
