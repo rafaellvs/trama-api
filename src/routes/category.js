@@ -19,7 +19,9 @@ router.get(
 
 router.post(
   '/create',
-  body('name').exists().withMessage('Field "name" is required.'),
+  body('name')
+    .exists().withMessage('Field "name" is required.')
+    .notEmpty().withMessage('Field "name" cannot be empty.'),
   categoryController.create
 )
 
