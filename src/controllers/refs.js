@@ -1,4 +1,5 @@
 import * as refsService from '../services/refs.js'
+import * as subjectService from '../services/subject.js'
 
 import { validateReqParams } from '../utils/validation.js'
 
@@ -33,6 +34,9 @@ const create = async (req, res, next) => {
   try {
     validateReqParams(req)
 
+    const subject = await subjectService.getById(subject_id)
+    if (!subject) throw new Error('404')
+
     const ref = await refsService.create(content, subject_id)
 
     return res.send(ref)
@@ -47,6 +51,9 @@ const update = async (req, res, next) => {
 
   try {
     validateReqParams(req)
+
+    const subject = await subjectService.getById(subject_id)
+    if (!subject) throw new Error('404')
 
     const ref = await refsService.update(id, content, subject_id)
     if (!ref) throw new Error('404')

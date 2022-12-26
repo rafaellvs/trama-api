@@ -76,6 +76,9 @@ const getSubjectsByCategoryId = async (req, res, next) => {
   const { id } = req.params
 
   try {
+    const category = await categoryService.getById(id)
+    if (!category) throw new Error('404')
+
     const subjects = await categoryService.getSubjectsByCategoryId(id)
 
     return res.send(subjects)
