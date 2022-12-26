@@ -20,7 +20,8 @@ router.get(
 router.post(
   '/create',
   body('name')
-    .exists().withMessage('Field "name" is required.'),
+    .exists().withMessage('Field "name" is required.')
+    .notEmpty().withMessage('Field "name" cannot be empty.'),
   body('category_id')
     .exists().withMessage('Field "category_id" is required.')
     .isNumeric().withMessage('Field "category_id" must be an integer.'),

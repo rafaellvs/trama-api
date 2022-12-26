@@ -21,7 +21,8 @@ router.get(
 router.post(
   '/create',
   body('content')
-    .exists().withMessage('Field "content" is required.'),
+    .exists().withMessage('Field "content" is required.')
+    .notEmpty().withMessage('Field "content" cannot be empty.'),
   body('subject_id')
     .exists().withMessage('Field "subject_id" is required.')
     .isNumeric().withMessage('Field "subject_id" must be an integer.'),
