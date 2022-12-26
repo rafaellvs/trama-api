@@ -5,63 +5,71 @@ import { validateReqParams } from '../utils/validation.js'
 const getById = async (req, res, next) => {
   const { id } = req.params
 
-  const error = validateReqParams(req)
-  if (error) return next(error)
+  try {
+    validateReqParams(req)
 
-  const category = await categoryService.getById(id)
-    .catch(err => next(err))
+    const category = await categoryService.getById(id)
+    if (!category) throw new Error('404')
 
-  if (!category) return next(new Error('404'))
-
-  return res.send(category)
+    return res.send(category)
+  } catch (err) {
+    return next(err)
+  }
 }
 
 const getAll = async (req, res, next) => {
-  const categories = await categoryService.getAll()
-    .catch(err => next(err))
+  try {
+    const categories = await categoryService.getAll()
 
-  res.send(categories)
+    return res.send(categories)
+  } catch (err) {
+    return next(err)
+  }
 }
 
 const create = async (req, res, next) => {
   const { name, description } = req.body
 
-  const error = validateReqParams(req)
-  if (error) return next(error)
+  try {
+    validateReqParams(req)
 
-  const category = await categoryService.create(name, description)
-    .catch(err => next(err))
+    const category = await categoryService.create(name, description)
 
-  return res.send(category)
+    return res.send(category)
+  } catch (err) {
+    return next(err)
+  }
 }
 
 const update = async (req, res, next) => {
   const { id } = req.params
   const { name, description } = req.body
 
-  const error = validateReqParams(req)
-  if (error) return next(error)
+  try {
+    validateReqParams(req)
 
-  const category = await categoryService.update(id, name, description)
-    .catch(err => next(err))
+    const category = await categoryService.update(id, name, description)
+    if (!category) throw new Error('404')
 
-  if (!category) return next(new Error('404'))
-
-  return res.send(category)
+    return res.send(category)
+  } catch (err) {
+    return next(err)
+  }
 }
 
 const remove = async (req, res, next) => {
   const { id } = req.params
 
-  const error = validateReqParams(req)
-  if (error) return next(error)
+  try {
+    validateReqParams(req)
 
-  const category = await categoryService.remove(id)
-    .catch(err => next(err))
+    const category = await categoryService.remove(id)
+    if (!category) throw new Error('404')
 
-  if (!category) return next(new Error('404'))
-
-  return res.send(category)
+    return res.send(category)
+  } catch (err) {
+    return next(err)
+  }
 }
 
 export {

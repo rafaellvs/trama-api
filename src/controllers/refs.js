@@ -5,63 +5,71 @@ import { validateReqParams } from '../utils/validation.js'
 const getById = async (req, res, next) => {
   const { id } = req.params
 
-  const error = validateReqParams(req)
-  if (error) return next(error)
+  try {
+    validateReqParams(req)
 
-  const ref = await refsService.getById(id)
-    .catch(err => next(err))
+    const ref = await refsService.getById(id)
+    if (!ref) throw new Error('404')
 
-  if (!ref) return next(new Error('404'))
-
-  return res.send(ref)
+    return res.send(ref)
+  } catch (err) {
+    return next(err)
+  }
 }
 
 const getAll = async (req, res, next) => {
-  const refs = await refsService.getAll()
-    .catch(err => next(err))
+  try {
+    const refs = await refsService.getAll()
 
-  return res.send(refs)
+    return res.send(refs)
+  } catch (err) {
+    return next(err)
+  }
 }
 
 const create = async (req, res, next) => {
   const { content, subject_id } = req.body
 
-  const error = validateReqParams(req)
-  if (error) return next(error)
+  try {
+    validateReqParams(req)
 
-  const ref = await refsService.create(content, subject_id)
-    .catch(err => next(err))
+    const ref = await refsService.create(content, subject_id)
 
-  return res.send(ref)
+    return res.send(ref)
+  } catch (err) {
+    return next(err)
+  }
 }
 
 const update = async (req, res, next) => {
   const { id } = req.params
   const { content, subject_id } = req.body
 
-  const error = validateReqParams(req)
-  if (error) return next(error)
+  try {
+    validateReqParams(req)
 
-  const ref = await refsService.update(id, content, subject_id)
-    .catch(err => next(err))
+    const ref = await refsService.update(id, content, subject_id)
+    if (!ref) throw new Error('404')
 
-  if (!ref) return next(new Error('404'))
-
-  return res.send(ref)
+    return res.send(ref)
+  } catch (err) {
+    return next(err)
+  }
 }
 
 const remove = async (req, res, next) => {
   const { id } = req.params
 
-  const error = validateReqParams(req)
-  if (error) return next(error)
+  try {
+    validateReqParams(req)
 
-  const ref = await refsService.remove(id)
-    .catch(err => next(err))
+    const ref = await refsService.remove(id)
+    if (!ref) throw new Error('404')
 
-  if (!ref) return next(new Error('404'))
-
-  return res.send(ref)
+    return res.send(ref)
+  } catch (err) {
+    return next(err)
+  }
 }
 
 export {
