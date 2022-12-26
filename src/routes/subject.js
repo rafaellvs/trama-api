@@ -29,16 +29,20 @@ router.post(
 
 router.patch(
   '/update/:id',
-  param('id')
-    .isNumeric().withMessage('Field "id" must be an integer.'),
+  param('id').isNumeric().withMessage('Field "id" must be an integer.'),
   subjectController.update
 )
 
 router.delete(
   '/remove/:id',
-  param('id')
-    .isNumeric().withMessage('Param "id" must be an integer.'),
+  param('id').isNumeric().withMessage('Param "id" must be an integer.'),
   subjectController.remove
+)
+
+router.get(
+  '/:id/refs',
+  param('id').isNumeric().withMessage('Param "id" must be an integer.'),
+  subjectController.getRefsBySubjectId
 )
 
 export default router

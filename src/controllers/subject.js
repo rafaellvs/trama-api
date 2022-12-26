@@ -73,10 +73,25 @@ const remove = async (req, res, next) => {
   }
 }
 
+const getRefsBySubjectId = async (req, res, next) => {
+  const { id } = req.params
+
+  try {
+    validateReqParams(req)
+
+    const refs = await subjectService.getRefsBySubjectId(id)
+
+    return res.send(refs)
+  } catch (err) {
+    return next(err)
+  }
+}
+
 export {
   getById,
   getAll,
   create,
   update,
   remove,
+  getRefsBySubjectId,
 }
