@@ -32,6 +32,8 @@ router.patch(
   '/update/:id',
   param('id')
     .isNumeric().withMessage('Param "id" must be an integer.'),
+  body('subject_id')
+    .isNumeric().withMessage('Param "id" must be an integer.'),
   refsController.update
 )
 
