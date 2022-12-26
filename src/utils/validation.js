@@ -6,7 +6,7 @@ const validateReqParams = (req) => {
   const errors = validationResult(req)
 
   if (!errors.isEmpty()) {
-    throw new TypeError(`Error: ${errors.array()[0].msg}`)
+    throw new TypeError(`${errors.array()[0].msg}`)
   }
 
   return false

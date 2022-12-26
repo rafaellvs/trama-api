@@ -29,7 +29,10 @@ router.post(
 
 router.patch(
   '/update/:id',
-  param('id').isNumeric().withMessage('Field "id" must be an integer.'),
+  param('id')
+    .isNumeric().withMessage('Field "id" must be an integer.'),
+  body('category_id')
+    .isNumeric().withMessage('Field "category_id" must be an integer.'),
   subjectController.update
 )
 
