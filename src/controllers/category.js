@@ -72,10 +72,23 @@ const remove = async (req, res, next) => {
   }
 }
 
+const getSubjectsByCategoryId = async (req, res, next) => {
+  const { id } = req.params
+
+  try {
+    const subjects = await categoryService.getSubjectsByCategoryId(id)
+
+    return res.send(subjects)
+  } catch (err) {
+    return next(err)
+  }
+}
+
 export {
   getById,
   getAll,
   create,
   update,
   remove,
+  getSubjectsByCategoryId,
 }

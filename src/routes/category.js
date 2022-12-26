@@ -35,4 +35,10 @@ router.delete(
   categoryController.remove
 )
 
+router.get(
+  '/:id/subject',
+  param('id').isNumeric().withMessage('Param "id" must be an integer.'),
+  categoryController.getSubjectsByCategoryId
+)
+
 export default router
