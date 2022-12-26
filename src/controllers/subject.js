@@ -1,4 +1,5 @@
 import * as subjectService from '../services/subject.js'
+import * as categoryService from '../services/category.js'
 
 import { validateReqParams } from '../utils/validation.js'
 
@@ -33,6 +34,9 @@ const create = async (req, res, next) => {
   try {
     validateReqParams(req)
 
+    const category = await categoryService.getById(category_id)
+    if (!category) throw new Error('404')
+
     const subject = await subjectService.create(name, description, category_id)
     if (!subject) throw new Error('404')
 
@@ -48,6 +52,9 @@ const update = async (req, res, next) => {
 
   try {
     validateReqParams(req)
+
+    const category = await categoryService.getById(category_id)
+    if (!category) throw new Error('404')
 
     const subject = await subjectService.update(id, name, description, category_id)
     if (!subject) throw new Error('404')
@@ -78,6 +85,9 @@ const getRefsBySubjectId = async (req, res, next) => {
 
   try {
     validateReqParams(req)
+
+    const subject = await subjectService.getById(id)
+    if (!subject) throw new Error('404')
 
     const refs = await subjectService.getRefsBySubjectId(id)
 
