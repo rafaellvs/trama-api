@@ -15,7 +15,6 @@ const getAll = async () => {
   const query = `
     SELECT * FROM refs;
   `
-
   const response = await pool.query(query)
 
   return response.rows

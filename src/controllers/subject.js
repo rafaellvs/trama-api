@@ -5,65 +5,72 @@ import { validateReqParams } from '../utils/validation.js'
 const getById = async (req, res, next) => {
   const { id } = req.params
 
-  const error = validateReqParams(req)
-  if (error) return next(error)
+  try {
+    validateReqParams(req)
 
-  const subject = await subjectService.getById(id)
-    .catch(err => next(err))
+    const subject = await subjectService.getById(id)
+    if (!subject) throw new Error('404')
 
-  if (!subject) return next(new Error('404'))
-
-  return res.send(subject)
+    return res.send(subject)
+  } catch (err) {
+    return next(err)
+  }
 }
 
 const getAll = async (req, res, next) => {
-  const subjects = await subjectService.getAll()
-    .catch(err => next(err))
+  try {
+    const subjects = await subjectService.getAll()
 
-  return res.send(subjects)
+    return res.send(subjects)
+  } catch (err) {
+    return next(err)
+  }
 }
 
 const create = async (req, res, next) => {
   const { name, description, category_id } = req.body
 
-  const error = validateReqParams(req)
-  if (error) return next(error)
+  try {
+    validateReqParams(req)
 
-  const subject = await subjectService.create(name, description, category_id)
-    .catch(err => next(err))
+    const subject = await subjectService.create(name, description, category_id)
+    if (!subject) throw new Error('404')
 
-  if (!subject) return next(new Error('404'))
-
-  return res.send(subject)
+    return res.send(subject)
+  } catch (err) {
+    return next(err)
+  }
 }
 
 const update = async (req, res, next) => {
   const { id } = req.params
   const { name, description, category_id } = req.body
 
-  const error = validateReqParams(req)
-  if (error) return next(error)
+  try {
+    validateReqParams(req)
 
-  const subject = await subjectService.update(id, name, description, category_id)
-    .catch(err => next(err))
+    const subject = await subjectService.update(id, name, description, category_id)
+    if (!subject) throw new Error('404')
 
-  if (!subject) return next(new Error('404'))
-
-  return res.send(subject)
+    return res.send(subject)
+  } catch (err) {
+    return next(err)
+  }
 }
 
 const remove = async (req, res, next) => {
   const { id } = req.params
 
-  const error = validateReqParams(req)
-  if (error) return next(error)
+  try {
+    validateReqParams(req)
 
-  const subject = await subjectService.remove(id)
-    .catch(err => next(err))
+    const subject = await subjectService.remove(id)
+    if (!subject) throw new Error('404')
 
-  if (!subject) return next(new Error('404'))
-
-  return res.send(subject)
+    return res.send(subject)
+  } catch (err) {
+    return next(err)
+  }
 }
 
 export {
