@@ -10,7 +10,7 @@ const getById = async (req, res, next) => {
     validateReqParams(req)
 
     const subject = await subjectService.getById(id)
-    if (!subject) throw new Error('404')
+    if (!subject) throw new Error('Subject not found', { cause: '404' })
 
     return res.send(subject)
   } catch (err) {
@@ -35,10 +35,10 @@ const create = async (req, res, next) => {
     validateReqParams(req)
 
     const category = await categoryService.getById(category_id)
-    if (!category) throw new Error('404')
+    if (!category) throw new Error('Category not found', { cause: '404' })
 
     const subject = await subjectService.create(name, description, category_id)
-    if (!subject) throw new Error('404')
+    if (!subject) throw new Error('Subject not found', { cause: '404' })
 
     return res.send(subject)
   } catch (err) {
@@ -54,10 +54,10 @@ const update = async (req, res, next) => {
     validateReqParams(req)
 
     const category = await categoryService.getById(category_id)
-    if (!category) throw new Error('404')
+    if (!category) throw new Error('Category not found', { cause: '404' })
 
     const subject = await subjectService.update(id, name, description, category_id)
-    if (!subject) throw new Error('404')
+    if (!subject) throw new Error('Subject not found', { cause: '404' })
 
     return res.send(subject)
   } catch (err) {
@@ -72,7 +72,7 @@ const remove = async (req, res, next) => {
     validateReqParams(req)
 
     const subject = await subjectService.remove(id)
-    if (!subject) throw new Error('404')
+    if (!subject) throw new Error('Subject not found', { cause: '404' })
 
     return res.send(subject)
   } catch (err) {
@@ -87,7 +87,7 @@ const getRefsBySubjectId = async (req, res, next) => {
     validateReqParams(req)
 
     const subject = await subjectService.getById(id)
-    if (!subject) throw new Error('404')
+    if (!subject) throw new Error('Subject not found', { cause: '404' })
 
     const refs = await subjectService.getRefsBySubjectId(id)
 

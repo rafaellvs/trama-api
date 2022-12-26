@@ -9,7 +9,7 @@ const getById = async (req, res, next) => {
     validateReqParams(req)
 
     const category = await categoryService.getById(id)
-    if (!category) throw new Error('404')
+    if (!category) throw new Error('Category not found', { cause: '404' })
 
     return res.send(category)
   } catch (err) {
@@ -49,7 +49,7 @@ const update = async (req, res, next) => {
     validateReqParams(req)
 
     const category = await categoryService.update(id, name, description)
-    if (!category) throw new Error('404')
+    if (!category) throw new Error('Category not found', { cause: '404' })
 
     return res.send(category)
   } catch (err) {
@@ -64,7 +64,7 @@ const remove = async (req, res, next) => {
     validateReqParams(req)
 
     const category = await categoryService.remove(id)
-    if (!category) throw new Error('404')
+    if (!category) throw new Error('Category not found', { cause: '404' })
 
     return res.send(category)
   } catch (err) {
@@ -77,7 +77,7 @@ const getSubjectsByCategoryId = async (req, res, next) => {
 
   try {
     const category = await categoryService.getById(id)
-    if (!category) throw new Error('404')
+    if (!category) throw new Error('Category not found', { cause: '404' })
 
     const subjects = await categoryService.getSubjectsByCategoryId(id)
 

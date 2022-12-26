@@ -10,7 +10,7 @@ const getById = async (req, res, next) => {
     validateReqParams(req)
 
     const ref = await refsService.getById(id)
-    if (!ref) throw new Error('404')
+    if (!ref) throw new Error('Ref not found', { cause: '404' })
 
     return res.send(ref)
   } catch (err) {
@@ -35,7 +35,7 @@ const create = async (req, res, next) => {
     validateReqParams(req)
 
     const subject = await subjectService.getById(subject_id)
-    if (!subject) throw new Error('404')
+    if (!subject) throw new Error('Subject not found', { cause: '404' })
 
     const ref = await refsService.create(content, subject_id)
 
@@ -53,10 +53,10 @@ const update = async (req, res, next) => {
     validateReqParams(req)
 
     const subject = await subjectService.getById(subject_id)
-    if (!subject) throw new Error('404')
+    if (!subject) throw new Error('Subject not found', { cause: '404' })
 
     const ref = await refsService.update(id, content, subject_id)
-    if (!ref) throw new Error('404')
+    if (!ref) throw new Error('Ref not found', { cause: '404' })
 
     return res.send(ref)
   } catch (err) {
@@ -71,7 +71,7 @@ const remove = async (req, res, next) => {
     validateReqParams(req)
 
     const ref = await refsService.remove(id)
-    if (!ref) throw new Error('404')
+    if (!ref) throw new Error('Ref not found', { cause: '404' })
 
     return res.send(ref)
   } catch (err) {
