@@ -1,14 +1,12 @@
 import { verifyJwt } from '../services/auth.js'
 
 const userAuthMiddleware = async (req, res, next) => {
-  const cookie = req.cookies
-  const token = cookie[process.env.COGNITO_JWTID_COOKIE_NAME]
-
   try {
+    const token = req.cookies[process.env.COGNITO_JWTID_COOKIE_NAME]
     await verifyJwt({ token })
-    return next(req)
+    next()
   } catch (err) {
-    res.status(401).send({ error: 'Unauthorized.' })
+    next(new Error(`Unauthorized: ${err.message}`, { cause: '401' }))
   }
 }
 

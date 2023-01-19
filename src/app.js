@@ -23,10 +23,9 @@ app.use(cors({
 }))
 
 app.use('/auth', authRouter)
-app.use(userAuthMiddleware)
-app.use('/subject', subjectRouter)
-app.use('/category', categoryRouter)
-app.use('/refs', refsRouter)
+app.use('/subject', userAuthMiddleware, subjectRouter)
+app.use('/category', userAuthMiddleware, categoryRouter)
+app.use('/refs', userAuthMiddleware, refsRouter)
 app.use(notFoundRouter)
 app.use(errorMiddleware)
 
