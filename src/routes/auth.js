@@ -6,4 +6,6 @@ const router = Router()
 
 router.post('/login', authController.login)
 
+router.post('/verify-token', authController.verifyToken)
+
 export default router
