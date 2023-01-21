@@ -3,6 +3,7 @@ import {
   CognitoUserPool,
   CognitoUser,
   AuthenticationDetails,
+  CognitoUserAttribute,
 } from 'amazon-cognito-identity-js'
 
 const userPool = new CognitoUserPool({
@@ -20,7 +21,9 @@ const verifyJwt = async ({ token }) => {
   return await verifier.verify(token)
 }
 
-const authenticateUser = async ({ username, password }) => {
+const authenticateUser = async (userData) => {
+  const { username, password } = userData
+
   const user = new CognitoUser({
     Username: username,
     Pool: userPool,
@@ -43,4 +46,71 @@ const authenticateUser = async ({ username, password }) => {
   })
 }
 
-export { authenticateUser, verifyJwt }
+const createUser = async (userData) => {
+  const { username, email, password } = userData
+
+  const userAttributes = []
+  const userEmail = new CognitoUserAttribute({
+    Name: 'email',
+    Value: email,
+  })
+  userAttributes.push(userEmail)
+
+  return await new Promise((resolve, reject) => {
+    userPool.signUp(
+      username,
+      password,
+      userAttributes,
+      [],
+      function (err, result) {
+        if (err !== null && err !== undefined) reject(err)
+
+        else if (result !== undefined) {
+          resolve({
+            id: result.userSub,
+            ...userData,
+          })
+        }
+      })
+  })
+}
+
+const confirmUserAccount = async ({ username, code }) => {
+  const user = new CognitoUser({
+    Username: username,
+    Pool: userPool,
+  })
+
+  return await new Promise((resolve, reject) => {
+    user.confirmRegistration(code, true, function (err, result) {
+      if (err !== null && err !== undefined) reject(err)
+      else if (result !== undefined) {
+        resolve(result)
+      }
+    })
+  })
+}
+
+const resendConfirmationCode = async ({ username }) => {
+  const user = new CognitoUser({
+    Username: username,
+    Pool: userPool,
+  })
+
+  return await new Promise((resolve, reject) => {
+    user.resendConfirmationCode(function (err, result) {
+      if (err !== null && err !== undefined) reject(err.message)
+      else if (result !== undefined) {
+        resolve(result.Destination)
+      }
+    })
+  })
+}
+
+export {
+  verifyJwt,
+  authenticateUser,
+  createUser,
+  confirmUserAccount,
+  resendConfirmationCode,
+}
