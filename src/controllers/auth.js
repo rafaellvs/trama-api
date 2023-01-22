@@ -6,6 +6,7 @@ import {
   verifyJwt,
   confirmUserAccount,
   resendConfirmationCode,
+  getCurrentUser,
 } from '../services/auth.js'
 
 const verifyToken = async (req, res, next) => {
@@ -32,14 +33,7 @@ const login = async (req, res, next) => {
       response.jwtToken,
       { httpOnly: true }
     )
-    const responseToSend = {
-      id: response.payload.sub,
-      username: response.payload['cognito:username'],
-      email: response.payload.email,
-      email_verified: response.payload.email_verified,
-      jwtToken: response.jwtToken,
-    }
-    return res.send(responseToSend)
+    return res.send(response)
   } catch (err) {
     return next(err)
   }
@@ -52,12 +46,7 @@ const signup = async (req, res, next) => {
     validateReqParams(req)
 
     const response = await createUser({ username, email, password })
-    const responseToSend = {
-      id: response.id,
-      username: response.username,
-      email: response.email,
-    }
-    res.send(responseToSend)
+    res.send(response)
   } catch (err) {
     next(err)
   }
@@ -89,10 +78,28 @@ const resendCode = async (req, res, next) => {
   }
 }
 
+const user = async (req, res, next) => {
+  const token = req.cookies[process.env.COGNITO_JWTID_COOKIE_NAME]
+
+  try {
+    const response = await getCurrentUser({ token })
+    return res.status(200).send(response)
+  } catch (err) {
+    return next(err)
+  }
+}
+
+const logout = async (req, res, next) => {
+  res.clearCookie(process.env.COGNITO_JWTID_COOKIE_NAME)
+  res.status(200).end()
+}
+
 export {
   login,
   verifyToken,
   signup,
   confirmAccount,
   resendCode,
+  user,
+  logout,
 }
