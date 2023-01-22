@@ -37,7 +37,14 @@ const authenticateUser = async (userData) => {
   return await new Promise((resolve, reject) => {
     user.authenticateUser(authParams, {
       onSuccess: (result) => {
-        resolve(result.getIdToken())
+        const idToken = result.getIdToken()
+        resolve({
+          id: idToken.payload.sub,
+          username: idToken.payload['cognito:username'],
+          email: idToken.payload.email,
+          email_verified: idToken.payload.email_verified,
+          jwtToken: idToken.jwtToken,
+        })
       },
       onFailure: (err) => {
         reject(err)
@@ -68,7 +75,8 @@ const createUser = async (userData) => {
         else if (result !== undefined) {
           resolve({
             id: result.userSub,
-            ...userData,
+            username,
+            email,
           })
         }
       })

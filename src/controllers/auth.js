@@ -32,14 +32,7 @@ const login = async (req, res, next) => {
       response.jwtToken,
       { httpOnly: true }
     )
-    const responseToSend = {
-      id: response.payload.sub,
-      username: response.payload['cognito:username'],
-      email: response.payload.email,
-      email_verified: response.payload.email_verified,
-      jwtToken: response.jwtToken,
-    }
-    return res.send(responseToSend)
+    return res.send(response)
   } catch (err) {
     return next(err)
   }
@@ -52,12 +45,7 @@ const signup = async (req, res, next) => {
     validateReqParams(req)
 
     const response = await createUser({ username, email, password })
-    const responseToSend = {
-      id: response.id,
-      username: response.username,
-      email: response.email,
-    }
-    res.send(responseToSend)
+    res.send(response)
   } catch (err) {
     next(err)
   }
