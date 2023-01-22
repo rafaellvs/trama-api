@@ -115,10 +115,25 @@ const resendConfirmationCode = async ({ username }) => {
   })
 }
 
+const getCurrentUser = async ({ token }) => {
+  try {
+    const payload = await verifyJwt({ token })
+    return {
+      id: payload.sub,
+      username: payload['cognito:username'],
+      email: payload.email,
+      email_verified: payload.email_verified,
+    }
+  } catch (err) {
+    return null
+  }
+}
+
 export {
   verifyJwt,
   authenticateUser,
   createUser,
   confirmUserAccount,
   resendConfirmationCode,
+  getCurrentUser,
 }

@@ -58,4 +58,14 @@ router.post(
   authController.resendCode
 )
 
+router.get(
+  '/user',
+  authController.user
+)
+
+router.get(
+  '/logout',
+  authController.logout
+)
+
 export default router

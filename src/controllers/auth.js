@@ -6,6 +6,7 @@ import {
   verifyJwt,
   confirmUserAccount,
   resendConfirmationCode,
+  getCurrentUser,
 } from '../services/auth.js'
 
 const verifyToken = async (req, res, next) => {
@@ -77,10 +78,28 @@ const resendCode = async (req, res, next) => {
   }
 }
 
+const user = async (req, res, next) => {
+  const token = req.cookies[process.env.COGNITO_JWTID_COOKIE_NAME]
+
+  try {
+    const response = await getCurrentUser({ token })
+    return res.status(200).send(response)
+  } catch (err) {
+    return next(err)
+  }
+}
+
+const logout = async (req, res, next) => {
+  res.clearCookie(process.env.COGNITO_JWTID_COOKIE_NAME)
+  res.status(200).end()
+}
+
 export {
   login,
   verifyToken,
   signup,
   confirmAccount,
   resendCode,
+  user,
+  logout,
 }
