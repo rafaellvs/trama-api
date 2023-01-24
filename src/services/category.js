@@ -58,7 +58,7 @@ const remove = async (id, user_id) => {
   return response.rows[0]
 }
 
-const getSubjectsByCategoryId = async (id, user_id) => {
+const getRecordsByCategoryId = async (id, user_id) => {
   const query = `
     SELECT * FROM record
     WHERE category_id=${id} AND user_id='${user_id}';
@@ -74,5 +74,5 @@ export {
   create,
   update,
   remove,
-  getSubjectsByCategoryId,
+  getRecordsByCategoryId,
 }
