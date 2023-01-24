@@ -1,4 +1,4 @@
-import * as subjectService from '../services/subject.js'
+import * as recordService from '../services/record.js'
 import * as categoryService from '../services/category.js'
 
 import { validateReqParams } from '../utils/validation.js'
@@ -10,10 +10,10 @@ const getById = async (req, res, next) => {
   try {
     validateReqParams(req)
 
-    const subject = await subjectService.getById(id, user_id)
-    if (!subject) throw new Error('Subject not found', { cause: '404' })
+    const record = await recordService.getById(id, user_id)
+    if (!record) throw new Error('Record not found', { cause: '404' })
 
-    return res.send(subject)
+    return res.send(record)
   } catch (err) {
     return next(err)
   }
@@ -23,9 +23,9 @@ const getAll = async (req, res, next) => {
   const { user_id } = res.locals
 
   try {
-    const subjects = await subjectService.getAll(user_id)
+    const records = await recordService.getAll(user_id)
 
-    return res.send(subjects)
+    return res.send(records)
   } catch (err) {
     return next(err)
   }
@@ -41,10 +41,10 @@ const create = async (req, res, next) => {
     const category = await categoryService.getById(category_id, user_id)
     if (!category) throw new Error('Category not found', { cause: '404' })
 
-    const subject = await subjectService.create(name, description, category_id, user_id)
-    if (!subject) throw new Error('Subject not found', { cause: '404' })
+    const record = await recordService.create(name, description, category_id, user_id)
+    if (!record) throw new Error('Record not found', { cause: '404' })
 
-    return res.send(subject)
+    return res.send(record)
   } catch (err) {
     return next(err)
   }
@@ -61,10 +61,10 @@ const update = async (req, res, next) => {
     const category = await categoryService.getById(category_id, user_id)
     if (!category) throw new Error('Category not found', { cause: '404' })
 
-    const subject = await subjectService.update(id, name, description, category_id, user_id)
-    if (!subject) throw new Error('Subject not found', { cause: '404' })
+    const record = await recordService.update(id, name, description, category_id, user_id)
+    if (!record) throw new Error('Record not found', { cause: '404' })
 
-    return res.send(subject)
+    return res.send(record)
   } catch (err) {
     return next(err)
   }
@@ -77,26 +77,26 @@ const remove = async (req, res, next) => {
   try {
     validateReqParams(req)
 
-    const subject = await subjectService.remove(id, user_id)
-    if (!subject) throw new Error('Subject not found', { cause: '404' })
+    const record = await recordService.remove(id, user_id)
+    if (!record) throw new Error('Record not found', { cause: '404' })
 
-    return res.send(subject)
+    return res.send(record)
   } catch (err) {
     return next(err)
   }
 }
 
-const getRefsBySubjectId = async (req, res, next) => {
+const getRefsByRecordId = async (req, res, next) => {
   const { id } = req.params
   const { user_id } = res.locals
 
   try {
     validateReqParams(req)
 
-    const subject = await subjectService.getById(id, user_id)
-    if (!subject) throw new Error('Subject not found', { cause: '404' })
+    const record = await recordService.getById(id, user_id)
+    if (!record) throw new Error('Record not found', { cause: '404' })
 
-    const refs = await subjectService.getRefsBySubjectId(id, user_id)
+    const refs = await recordService.getRefsByRecordId(id, user_id)
 
     return res.send(refs)
   } catch (err) {
@@ -110,5 +110,5 @@ export {
   create,
   update,
   remove,
-  getRefsBySubjectId,
+  getRefsByRecordId,
 }

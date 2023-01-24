@@ -54,7 +54,7 @@ const remove = async (id, user_id) => {
   return response.rows[0]
 }
 
-const getRefsBySubjectId = async (id, user_id) => {
+const getRefsByRecordId = async (id, user_id) => {
   const query = `
     SELECT * FROM ref
     WHERE record_id=${id} AND user_id='${user_id}';
@@ -70,5 +70,5 @@ export {
   create,
   update,
   remove,
-  getRefsBySubjectId,
+  getRefsByRecordId,
 }

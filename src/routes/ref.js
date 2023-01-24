@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import validator from 'express-validator'
 
-import * as refsController from '../controllers/refs.js'
+import * as refsController from '../controllers/ref.js'
 
 const router = Router()
 const { param, body } = validator

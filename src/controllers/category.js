@@ -79,7 +79,7 @@ const remove = async (req, res, next) => {
   }
 }
 
-const getSubjectsByCategoryId = async (req, res, next) => {
+const getRecordsByCategoryId = async (req, res, next) => {
   const { id } = req.params
   const { user_id } = res.locals
 
@@ -87,9 +87,9 @@ const getSubjectsByCategoryId = async (req, res, next) => {
     const category = await categoryService.getById(id, user_id)
     if (!category) throw new Error('Category not found', { cause: '404' })
 
-    const subjects = await categoryService.getSubjectsByCategoryId(id, user_id)
+    const records = await categoryService.getRecordsByCategoryId(id, user_id)
 
-    return res.send(subjects)
+    return res.send(records)
   } catch (err) {
     return next(err)
   }
@@ -101,5 +101,5 @@ export {
   create,
   update,
   remove,
-  getSubjectsByCategoryId,
+  getRecordsByCategoryId,
 }

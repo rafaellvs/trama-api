@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import validator from 'express-validator'
 
-import * as subjectController from '../controllers/subject.js'
+import * as subjectController from '../controllers/record.js'
 
 const router = Router()
 const { param, body } = validator
@@ -46,7 +46,7 @@ router.delete(
 router.get(
   '/:id/refs',
   param('id').isNumeric().withMessage('Param "id" must be an integer.'),
-  subjectController.getRefsBySubjectId
+  subjectController.getRefsByRecordId
 )
 
 export default router

@@ -3,9 +3,9 @@ import * as dotenv from 'dotenv'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 
-import subjectRouter from './routes/subject.js'
+import recordRouter from './routes/record.js'
 import categoryRouter from './routes/category.js'
-import refsRouter from './routes/refs.js'
+import refsRouter from './routes/ref.js'
 import authRouter from './routes/auth.js'
 import notFoundRouter from './routes/404.js'
 
@@ -23,9 +23,9 @@ app.use(cors({
 }))
 
 app.use('/auth', authRouter)
-app.use('/subject', userAuthMiddleware, subjectRouter)
+app.use('/record', userAuthMiddleware, recordRouter)
 app.use('/category', userAuthMiddleware, categoryRouter)
-app.use('/refs', userAuthMiddleware, refsRouter)
+app.use('/ref', userAuthMiddleware, refsRouter)
 app.use(notFoundRouter)
 app.use(errorMiddleware)
 

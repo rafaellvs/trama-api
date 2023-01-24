@@ -1,5 +1,5 @@
-import * as refsService from '../services/refs.js'
-import * as subjectService from '../services/subject.js'
+import * as refService from '../services/ref.js'
+import * as recordService from '../services/record.js'
 
 import { validateReqParams } from '../utils/validation.js'
 
@@ -10,7 +10,7 @@ const getById = async (req, res, next) => {
   try {
     validateReqParams(req)
 
-    const ref = await refsService.getById(id, user_id)
+    const ref = await refService.getById(id, user_id)
     if (!ref) throw new Error('Ref not found', { cause: '404' })
 
     return res.send(ref)
@@ -23,7 +23,7 @@ const getAll = async (req, res, next) => {
   const { user_id } = res.locals
 
   try {
-    const refs = await refsService.getAll(user_id)
+    const refs = await refService.getAll(user_id)
 
     return res.send(refs)
   } catch (err) {
@@ -38,10 +38,10 @@ const create = async (req, res, next) => {
   try {
     validateReqParams(req)
 
-    const subject = await subjectService.getById(record_id, user_id)
-    if (!subject) throw new Error('Subject not found', { cause: '404' })
+    const record = await recordService.getById(record_id, user_id)
+    if (!record) throw new Error('Record not found', { cause: '404' })
 
-    const ref = await refsService.create(content, record_id, user_id)
+    const ref = await refService.create(content, record_id, user_id)
 
     return res.send(ref)
   } catch (err) {
@@ -57,10 +57,10 @@ const update = async (req, res, next) => {
   try {
     validateReqParams(req)
 
-    const subject = await subjectService.getById(record_id, user_id)
-    if (!subject) throw new Error('Subject not found', { cause: '404' })
+    const record = await recordService.getById(record_id, user_id)
+    if (!record) throw new Error('Record not found', { cause: '404' })
 
-    const ref = await refsService.update(id, content, record_id, user_id)
+    const ref = await refService.update(id, content, record_id, user_id)
     if (!ref) throw new Error('Ref not found', { cause: '404' })
 
     return res.send(ref)
@@ -76,7 +76,7 @@ const remove = async (req, res, next) => {
   try {
     validateReqParams(req)
 
-    const ref = await refsService.remove(id, user_id)
+    const ref = await refService.remove(id, user_id)
     if (!ref) throw new Error('Ref not found', { cause: '404' })
 
     return res.send(ref)
