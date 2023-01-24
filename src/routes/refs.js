@@ -23,9 +23,9 @@ router.post(
   body('content')
     .exists().withMessage('Field "content" is required.')
     .notEmpty().withMessage('Field "content" cannot be empty.'),
-  body('subject_id')
-    .exists().withMessage('Field "subject_id" is required.')
-    .isNumeric().withMessage('Field "subject_id" must be an integer.'),
+  body('record_id')
+    .exists().withMessage('Field "record_id" is required.')
+    .isNumeric().withMessage('Field "record_id" must be an integer.'),
   refsController.create
 )
 
@@ -33,8 +33,8 @@ router.patch(
   '/update/:id',
   param('id')
     .isNumeric().withMessage('Param "id" must be an integer.'),
-  body('subject_id')
-    .isNumeric().withMessage('Param "subject_id" must be an integer.'),
+  body('record_id')
+    .isNumeric().withMessage('Param "record_id" must be an integer.'),
   refsController.update
 )
 
