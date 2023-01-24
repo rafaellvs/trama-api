@@ -4,11 +4,12 @@ import { validateReqParams } from '../utils/validation.js'
 
 const getById = async (req, res, next) => {
   const { id } = req.params
+  const { user_id } = res.locals
 
   try {
     validateReqParams(req)
 
-    const category = await categoryService.getById(id)
+    const category = await categoryService.getById(id, user_id)
     if (!category) throw new Error('Category not found', { cause: '404' })
 
     return res.send(category)
@@ -18,22 +19,26 @@ const getById = async (req, res, next) => {
 }
 
 const getAll = async (req, res, next) => {
+  const { user_id } = res.locals
+
   try {
-    const categories = await categoryService.getAll()
+    const categories = await categoryService.getAll(user_id)
 
     return res.send(categories)
   } catch (err) {
+    console.log(err)
     return next(err)
   }
 }
 
 const create = async (req, res, next) => {
   const { name, description } = req.body
+  const { user_id } = res.locals
 
   try {
     validateReqParams(req)
 
-    const category = await categoryService.create(name, description)
+    const category = await categoryService.create(name, description, user_id)
 
     return res.send(category)
   } catch (err) {
@@ -44,11 +49,12 @@ const create = async (req, res, next) => {
 const update = async (req, res, next) => {
   const { id } = req.params
   const { name, description } = req.body
+  const { user_id } = res.locals
 
   try {
     validateReqParams(req)
 
-    const category = await categoryService.update(id, name, description)
+    const category = await categoryService.update(id, name, description, user_id)
     if (!category) throw new Error('Category not found', { cause: '404' })
 
     return res.send(category)
@@ -59,11 +65,12 @@ const update = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
   const { id } = req.params
+  const { user_id } = res.locals
 
   try {
     validateReqParams(req)
 
-    const category = await categoryService.remove(id)
+    const category = await categoryService.remove(id, user_id)
     if (!category) throw new Error('Category not found', { cause: '404' })
 
     return res.send(category)
@@ -74,12 +81,13 @@ const remove = async (req, res, next) => {
 
 const getSubjectsByCategoryId = async (req, res, next) => {
   const { id } = req.params
+  const { user_id } = res.locals
 
   try {
-    const category = await categoryService.getById(id)
+    const category = await categoryService.getById(id, user_id)
     if (!category) throw new Error('Category not found', { cause: '404' })
 
-    const subjects = await categoryService.getSubjectsByCategoryId(id)
+    const subjects = await categoryService.getSubjectsByCategoryId(id, user_id)
 
     return res.send(subjects)
   } catch (err) {

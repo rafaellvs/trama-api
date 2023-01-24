@@ -1,29 +1,30 @@
 import { pool } from './_db-connection.js'
 import { formatSetQueryParams } from '../utils/index.js'
 
-const getById = async (id) => {
+const getById = async (id, user_id) => {
   const query = `
     SELECT * FROM category 
-    WHERE id=${id};
+    WHERE id=${id} AND user_id='${user_id}';
   `
   const response = await pool.query(query)
 
   return response.rows[0]
 }
 
-const getAll = async () => {
+const getAll = async (user_id) => {
   const query = `
-    SELECT * FROM category;
+    SELECT * FROM category
+    WHERE user_id='${user_id}';
   `
   const response = await pool.query(query)
 
   return response.rows
 }
 
-const create = async (name, description) => {
+const create = async (name, description, user_id) => {
   const query = `
-    INSERT INTO category(name, description) 
-    VALUES('${name}', '${description}')
+    INSERT INTO category(name, description, user_id) 
+    VALUES('${name}', '${description}', '${user_id}')
     RETURNING *;
   `
   const response = await pool.query(query)
@@ -31,14 +32,14 @@ const create = async (name, description) => {
   return response.rows[0]
 }
 
-const update = async (id, name, description) => {
+const update = async (id, name, description, user_id) => {
   const query = `
     UPDATE category 
     SET ${formatSetQueryParams([
       { name: 'name', content: name },
       { name: 'description', content: description },
     ])}
-    WHERE id=${id}
+    WHERE id=${id} AND user_id='${user_id}'
     RETURNING *;
   `
   const response = await pool.query(query)
@@ -46,10 +47,10 @@ const update = async (id, name, description) => {
   return response.rows[0]
 }
 
-const remove = async (id) => {
+const remove = async (id, user_id) => {
   const query = `
     DELETE FROM category 
-    WHERE id=${id}
+    WHERE id=${id} AND user_id='${user_id}'
     RETURNING *;
   `
   const response = await pool.query(query)
@@ -57,10 +58,10 @@ const remove = async (id) => {
   return response.rows[0]
 }
 
-const getSubjectsByCategoryId = async (id) => {
+const getSubjectsByCategoryId = async (id, user_id) => {
   const query = `
-    SELECT * FROM subject
-    WHERE category_id=${id};
+    SELECT * FROM record
+    WHERE category_id=${id} AND user_id='${user_id}';
   `
   const response = await pool.query(query)
 
