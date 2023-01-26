@@ -7,6 +7,8 @@ import {
   confirmUserAccount,
   resendConfirmationCode,
   getCurrentUser,
+  sendForgotPasswordCode,
+  confirmNewPassword,
 } from '../services/auth.js'
 
 const verifyToken = async (req, res, next) => {
@@ -94,6 +96,33 @@ const logout = async (req, res, next) => {
   res.status(200).end()
 }
 
+const forgotPassword = async (req, res, next) => {
+  const { username } = req.body
+
+  try {
+    validateReqParams(req)
+
+    const response = await sendForgotPasswordCode({ username })
+    console.log(response)
+    return res.status(200).send(response)
+  } catch (err) {
+    return next(err)
+  }
+}
+
+const confirmResetPassword = async (req, res, next) => {
+  const { username, code, newPassword } = req.body
+
+  try {
+    validateReqParams(req)
+
+    const response = await confirmNewPassword({ username, code, newPassword })
+    return res.status(200).send(response)
+  } catch (err) {
+    return next(err)
+  }
+}
+
 export {
   login,
   verifyToken,
@@ -102,4 +131,6 @@ export {
   resendCode,
   user,
   logout,
+  forgotPassword,
+  confirmResetPassword,
 }

@@ -26,7 +26,6 @@ const getAll = async (req, res, next) => {
 
     return res.send(categories)
   } catch (err) {
-    console.log(err)
     return next(err)
   }
 }

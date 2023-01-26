@@ -129,6 +129,34 @@ const getCurrentUser = async ({ token }) => {
   }
 }
 
+const sendForgotPasswordCode = async ({ username }) => {
+  const user = new CognitoUser({
+    Username: username,
+    Pool: userPool,
+  })
+
+  return new Promise((resolve, reject) => {
+    user.forgotPassword({
+      onSuccess: data => resolve(data.CodeDeliveryDetails.Destination),
+      onFailure: err => reject(err),
+    })
+  })
+}
+
+const confirmNewPassword = async ({ username, code, newPassword }) => {
+  const user = new CognitoUser({
+    Username: username,
+    Pool: userPool,
+  })
+
+  return new Promise((resolve, reject) => {
+    user.confirmPassword(code, newPassword, {
+      onSuccess: success => resolve(success),
+      onFailure: err => reject(err),
+    })
+  })
+}
+
 export {
   verifyJwt,
   authenticateUser,
@@ -136,4 +164,6 @@ export {
   confirmUserAccount,
   resendConfirmationCode,
   getCurrentUser,
+  sendForgotPasswordCode,
+  confirmNewPassword,
 }
