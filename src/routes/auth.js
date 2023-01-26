@@ -68,4 +68,26 @@ router.get(
   authController.logout
 )
 
+router.post(
+  '/forgot-password',
+  body('username')
+    .exists().withMessage('Field "username" is required.')
+    .notEmpty().withMessage('Field "username" cannot be empty.'),
+  authController.forgotPassword
+)
+
+router.post(
+  '/confirm-new-password',
+  body('username')
+    .exists().withMessage('Field "username" is required.')
+    .notEmpty().withMessage('Field "username" cannot be empty.'),
+  body('newPassword')
+    .exists().withMessage('Field "newPassword" is required.')
+    .notEmpty().withMessage('Field "newPassword" cannot be empty.'),
+  body('code')
+    .exists().withMessage('Field "code" is required.')
+    .notEmpty().withMessage('Field "code" cannot be empty.'),
+  authController.confirmResetPassword
+)
+
 export default router
