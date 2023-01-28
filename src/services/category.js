@@ -14,7 +14,8 @@ const getById = async (id, user_id) => {
 const getAll = async (user_id) => {
   const query = `
     SELECT * FROM category
-    WHERE user_id='${user_id}';
+    WHERE user_id='${user_id}'
+    ORDER BY created_at DESC;
   `
   const response = await pool.query(query)
 
@@ -61,7 +62,8 @@ const remove = async (id, user_id) => {
 const getRecordsByCategoryId = async (id, user_id) => {
   const query = `
     SELECT * FROM record
-    WHERE category_id=${id} AND user_id='${user_id}';
+    WHERE category_id=${id} AND user_id='${user_id}'
+    ORDER BY created_at DESC;
   `
   const response = await pool.query(query)
 

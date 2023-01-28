@@ -14,7 +14,8 @@ const getById = async (id, user_id) => {
 const getAll = async (user_id) => {
   const query = `
     SELECT * FROM ref
-    WHERE user_id='${user_id}';
+    WHERE user_id='${user_id}'
+    ORDER BY created_at DESC;
   `
   const response = await pool.query(query)
 
