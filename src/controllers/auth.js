@@ -11,6 +11,11 @@ import {
   confirmNewPassword,
 } from '../services/auth.js'
 
+const cookieConfig = {
+  httpOnly: true,
+  domain: process.env.COOKIE_DOMAIN,
+}
+
 const verifyToken = async (req, res, next) => {
   try {
     validateReqParams(req)
@@ -33,10 +38,7 @@ const login = async (req, res, next) => {
     res.cookie(
       process.env.COGNITO_JWTID_COOKIE_NAME,
       response.jwtToken,
-      {
-        httpOnly: true,
-        domain: process.env.COOKIE_DOMAIN,
-      }
+      cookieConfig,
     )
     return res.send(response)
   } catch (err) {
@@ -95,7 +97,10 @@ const user = async (req, res, next) => {
 }
 
 const logout = async (req, res, next) => {
-  res.clearCookie(process.env.COGNITO_JWTID_COOKIE_NAME)
+  res.clearCookie(
+    process.env.COGNITO_JWTID_COOKIE_NAME,
+    cookieConfig
+  )
   res.status(200).end()
 }
 
