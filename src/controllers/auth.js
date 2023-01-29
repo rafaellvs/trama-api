@@ -33,7 +33,10 @@ const login = async (req, res, next) => {
     res.cookie(
       process.env.COGNITO_JWTID_COOKIE_NAME,
       response.jwtToken,
-      { httpOnly: true }
+      {
+        httpOnly: true,
+        domain: process.env.COOKIE_DOMAIN,
+      }
     )
     return res.send(response)
   } catch (err) {
