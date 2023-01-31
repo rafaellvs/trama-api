@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import validator from 'express-validator'
 
-import * as subjectController from '../controllers/record.js'
+import * as recordController from '../controllers/record.js'
 
 const router = Router()
 const { param, body } = validator
@@ -9,12 +9,12 @@ const { param, body } = validator
 router.get(
   '/:id',
   param('id').isNumeric().withMessage('Param "id" must be an integer.'),
-  subjectController.getById
+  recordController.getById
 )
 
 router.get(
   '/',
-  subjectController.getAll
+  recordController.getAll
 )
 
 router.post(
@@ -25,7 +25,7 @@ router.post(
   body('category_id')
     .exists().withMessage('Field "category_id" is required.')
     .isNumeric().withMessage('Field "category_id" must be an integer.'),
-  subjectController.create
+  recordController.create
 )
 
 router.patch(
@@ -34,19 +34,19 @@ router.patch(
     .isNumeric().withMessage('Field "id" must be an integer.'),
   body('category_id')
     .isNumeric().withMessage('Field "category_id" must be an integer.'),
-  subjectController.update
+  recordController.update
 )
 
 router.delete(
   '/remove/:id',
   param('id').isNumeric().withMessage('Param "id" must be an integer.'),
-  subjectController.remove
+  recordController.remove
 )
 
 router.get(
   '/:id/refs',
   param('id').isNumeric().withMessage('Param "id" must be an integer.'),
-  subjectController.getRefsByRecordId
+  recordController.getRefsByRecordId
 )
 
 export default router
