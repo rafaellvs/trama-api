@@ -38,7 +38,7 @@ router.delete(
 )
 
 router.get(
-  '/:id/subject',
+  '/:id/record',
   param('id').isNumeric().withMessage('Param "id" must be an integer.'),
   categoryController.getRecordsByCategoryId
 )
