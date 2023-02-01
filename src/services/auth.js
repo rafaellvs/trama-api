@@ -6,6 +6,8 @@ import {
   CognitoUserAttribute,
 } from 'amazon-cognito-identity-js'
 
+import { UnauthorizedError, ValidationError } from '../middlewares/error.js'
+
 const userPool = new CognitoUserPool({
   ClientId: process.env.COGNITO_CLIENT_ID,
   UserPoolId: process.env.COGNITO_USERPOOL_ID,
@@ -18,7 +20,11 @@ const verifyJwt = async ({ token }) => {
     tokenUse: 'id',
   })
 
-  return await verifier.verify(token)
+  try {
+    return await verifier.verify(token)
+  } catch (err) {
+    throw new UnauthorizedError('Credenciais inválidas.')
+  }
 }
 
 const authenticateUser = async (userData) => {
@@ -47,7 +53,18 @@ const authenticateUser = async (userData) => {
         })
       },
       onFailure: (err) => {
-        reject(err)
+        switch (err.code) {
+          case 'UserNotConfirmedException':
+            reject(new UnauthorizedError('Usuário não confirmado.'))
+            break
+
+          case 'NotAuthorizedException':
+            reject(new UnauthorizedError('Usuário ou senha incorretos.'))
+            break
+
+          default:
+            reject(err)
+        }
       },
     })
   })
@@ -70,9 +87,24 @@ const createUser = async (userData) => {
       userAttributes,
       [],
       function (err, result) {
-        if (err !== null && err !== undefined) reject(err)
+        if (err !== null && err !== undefined) {
+          switch (err.code) {
+            case 'UsernameExistsException':
+              reject(new ValidationError('Esse nome de usuário não está disponível.'))
+              break
 
-        else if (result !== undefined) {
+            case 'InvalidPasswordException':
+              reject(new ValidationError('Senha em formato inválido.'))
+              break
+
+            case 'InvalidParameterException':
+              reject(new ValidationError('E-mail em formato inválido.'))
+              break
+
+            default:
+              reject(err)
+          }
+        } else if (result !== undefined) {
           resolve({
             id: result.userSub,
             username,
@@ -91,8 +123,21 @@ const confirmUserAccount = async ({ username, code }) => {
 
   return await new Promise((resolve, reject) => {
     user.confirmRegistration(code, true, function (err, result) {
-      if (err !== null && err !== undefined) reject(err)
-      else if (result !== undefined) {
+      if (err !== null && err !== undefined) {
+        switch (err.code) {
+          case 'CodeMismatchException':
+          case 'ExpiredCodeException':
+            reject(new ValidationError('Código inválido.'))
+            break
+
+          case 'UserNotFoundException':
+            reject(new ValidationError('Usuário inválido.'))
+            break
+
+          default:
+            reject(err)
+        }
+      } else if (result !== undefined) {
         resolve(result)
       }
     })
@@ -107,8 +152,16 @@ const resendConfirmationCode = async ({ username }) => {
 
   return await new Promise((resolve, reject) => {
     user.resendConfirmationCode(function (err, result) {
-      if (err !== null && err !== undefined) reject(err.message)
-      else if (result !== undefined) {
+      if (err !== null && err !== undefined) {
+        switch (err.code) {
+          case 'CodeDeliveryFailureException':
+            reject(new ValidationError('Não foi possível enviar o código.'))
+            break
+
+          default:
+            reject(err)
+        }
+      } else if (result !== undefined) {
         resolve(result.Destination)
       }
     })
@@ -138,7 +191,16 @@ const sendForgotPasswordCode = async ({ username }) => {
   return new Promise((resolve, reject) => {
     user.forgotPassword({
       onSuccess: data => resolve(data.CodeDeliveryDetails.Destination),
-      onFailure: err => reject(err),
+      onFailure: err => {
+        switch (err.code) {
+          case 'CodeDeliveryFailureException':
+            reject(new ValidationError('Não foi possível enviar o código.'))
+            break
+
+          default:
+            reject(err)
+        }
+      },
     })
   })
 }
@@ -152,7 +214,29 @@ const confirmNewPassword = async ({ username, code, newPassword }) => {
   return new Promise((resolve, reject) => {
     user.confirmPassword(code, newPassword, {
       onSuccess: success => resolve(success),
-      onFailure: err => reject(err),
+      onFailure: err => {
+        switch (err.code) {
+          case 'CodeMismatchException':
+          case 'ExpiredCodeException':
+            reject(new ValidationError('Código inválido.'))
+            break
+
+          case 'InvalidPasswordException':
+            reject(new ValidationError('Senha em formato inválido.'))
+            break
+
+          case 'UserNotConfirmedException':
+            reject(new UnauthorizedError('Usuário não confirmado.'))
+            break
+
+          case 'UserNotFoundException':
+            reject(new ValidationError('Usuário inválido.'))
+            break
+
+          default:
+            reject(err)
+        }
+      },
     })
   })
 }
