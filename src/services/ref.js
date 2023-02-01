@@ -1,4 +1,7 @@
 import { pool } from './_db-connection.js'
+import * as recordService from './record.js'
+
+import { NotFoundError } from '../middlewares/error.js'
 import { formatSetQueryParams } from '../utils/index.js'
 
 const getById = async (id, user_id) => {
@@ -7,6 +10,7 @@ const getById = async (id, user_id) => {
     WHERE id=${id} AND user_id='${user_id}';
   `
   const response = await pool.query(query)
+  if (response.rowCount === 0) throw new NotFoundError('Referência não encontrada.')
 
   return response.rows[0]
 }
@@ -23,6 +27,8 @@ const getAll = async (user_id) => {
 }
 
 const create = async (content, record_id, user_id) => {
+  await recordService.getById(record_id, user_id)
+
   const query = `
     INSERT INTO ref(content, record_id, user_id)
     VALUES('${content}', '${record_id}', '${user_id}')
@@ -34,6 +40,8 @@ const create = async (content, record_id, user_id) => {
 }
 
 const update = async (id, content, record_id, user_id) => {
+  await recordService.getById(record_id, user_id)
+
   const query = `
     UPDATE ref
     SET ${formatSetQueryParams([
@@ -44,6 +52,7 @@ const update = async (id, content, record_id, user_id) => {
     RETURNING *;
   `
   const response = await pool.query(query)
+  if (response.rowCount === 0) throw new NotFoundError('Referência não encontrada.')
 
   return response.rows[0]
 }
@@ -55,6 +64,7 @@ const remove = async (id, user_id) => {
     RETURNING *;
   `
   const response = await pool.query(query)
+  if (response.rowCount === 0) throw new NotFoundError('Referência não encontrada.')
 
   return response.rows[0]
 }

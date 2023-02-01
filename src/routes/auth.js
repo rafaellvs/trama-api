@@ -45,8 +45,8 @@ router.post(
     .exists().withMessage('Field "username" is required.')
     .notEmpty().withMessage('Field "username" cannot be empty.'),
   body('code')
-    .exists().withMessage('Field "username" is required.')
-    .notEmpty().withMessage('Field "username" cannot be empty.'),
+    .exists().withMessage('Field "code" is required.')
+    .notEmpty().withMessage('Field "code" cannot be empty.'),
   authController.confirmAccount
 )
 

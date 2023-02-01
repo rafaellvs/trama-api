@@ -3,7 +3,7 @@ import { Router } from 'express'
 const router = Router()
 
 router.all('*', (req, res, next) => {
-  return next(new Error('Route not found', { cause: '404' }))
+  return res.status(404).send({ error: 'Página não encontrada.' })
 })
 
 export default router

@@ -22,9 +22,10 @@ const verifyToken = async (req, res, next) => {
 
     const { token } = req.body
     await verifyJwt({ token })
+
     res.status(200).send()
   } catch (err) {
-    next(new Error(`Unauthorized: ${err.message}`, { cause: '401' }))
+    next(err)
   }
 }
 
@@ -111,7 +112,6 @@ const forgotPassword = async (req, res, next) => {
     validateReqParams(req)
 
     const response = await sendForgotPasswordCode({ username })
-    console.log(response)
     return res.status(200).send(response)
   } catch (err) {
     return next(err)

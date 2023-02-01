@@ -1,5 +1,4 @@
 import * as recordService from '../services/record.js'
-import * as categoryService from '../services/category.js'
 
 import { validateReqParams } from '../utils/validation.js'
 
@@ -11,8 +10,6 @@ const getById = async (req, res, next) => {
     validateReqParams(req)
 
     const record = await recordService.getById(id, user_id)
-    if (!record) throw new Error('Record not found', { cause: '404' })
-
     return res.send(record)
   } catch (err) {
     return next(err)
@@ -38,12 +35,7 @@ const create = async (req, res, next) => {
   try {
     validateReqParams(req)
 
-    const category = await categoryService.getById(category_id, user_id)
-    if (!category) throw new Error('Category not found', { cause: '404' })
-
     const record = await recordService.create(name, description, category_id, user_id)
-    if (!record) throw new Error('Record not found', { cause: '404' })
-
     return res.send(record)
   } catch (err) {
     return next(err)
@@ -58,12 +50,7 @@ const update = async (req, res, next) => {
   try {
     validateReqParams(req)
 
-    const category = await categoryService.getById(category_id, user_id)
-    if (!category) throw new Error('Category not found', { cause: '404' })
-
     const record = await recordService.update(id, name, description, category_id, user_id)
-    if (!record) throw new Error('Record not found', { cause: '404' })
-
     return res.send(record)
   } catch (err) {
     return next(err)
@@ -78,8 +65,6 @@ const remove = async (req, res, next) => {
     validateReqParams(req)
 
     const record = await recordService.remove(id, user_id)
-    if (!record) throw new Error('Record not found', { cause: '404' })
-
     return res.send(record)
   } catch (err) {
     return next(err)
@@ -93,11 +78,7 @@ const getRefsByRecordId = async (req, res, next) => {
   try {
     validateReqParams(req)
 
-    const record = await recordService.getById(id, user_id)
-    if (!record) throw new Error('Record not found', { cause: '404' })
-
     const refs = await recordService.getRefsByRecordId(id, user_id)
-
     return res.send(refs)
   } catch (err) {
     return next(err)

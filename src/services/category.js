@@ -1,5 +1,6 @@
 import { pool } from './_db-connection.js'
 import { formatSetQueryParams } from '../utils/index.js'
+import { NotFoundError } from '../middlewares/error.js'
 
 const getById = async (id, user_id) => {
   const query = `
@@ -7,6 +8,7 @@ const getById = async (id, user_id) => {
     WHERE id=${id} AND user_id='${user_id}';
   `
   const response = await pool.query(query)
+  if (response.rowCount === 0) throw new NotFoundError('Categoria não encontrada.')
 
   return response.rows[0]
 }
@@ -44,6 +46,7 @@ const update = async (id, name, description, user_id) => {
     RETURNING *;
   `
   const response = await pool.query(query)
+  if (response.rowCount === 0) throw new NotFoundError('Categoria não encontrada.')
 
   return response.rows[0]
 }
@@ -55,11 +58,14 @@ const remove = async (id, user_id) => {
     RETURNING *;
   `
   const response = await pool.query(query)
+  if (response.rowCount === 0) throw new NotFoundError('Categoria não encontrada.')
 
   return response.rows[0]
 }
 
 const getRecordsByCategoryId = async (id, user_id) => {
+  await getById(id, user_id)
+
   const query = `
     SELECT * FROM record
     WHERE category_id=${id} AND user_id='${user_id}'

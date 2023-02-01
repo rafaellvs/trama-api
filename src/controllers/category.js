@@ -10,8 +10,6 @@ const getById = async (req, res, next) => {
     validateReqParams(req)
 
     const category = await categoryService.getById(id, user_id)
-    if (!category) throw new Error('Category not found', { cause: '404' })
-
     return res.send(category)
   } catch (err) {
     return next(err)
@@ -23,7 +21,6 @@ const getAll = async (req, res, next) => {
 
   try {
     const categories = await categoryService.getAll(user_id)
-
     return res.send(categories)
   } catch (err) {
     return next(err)
@@ -38,7 +35,6 @@ const create = async (req, res, next) => {
     validateReqParams(req)
 
     const category = await categoryService.create(name, description, user_id)
-
     return res.send(category)
   } catch (err) {
     return next(err)
@@ -54,8 +50,6 @@ const update = async (req, res, next) => {
     validateReqParams(req)
 
     const category = await categoryService.update(id, name, description, user_id)
-    if (!category) throw new Error('Category not found', { cause: '404' })
-
     return res.send(category)
   } catch (err) {
     return next(err)
@@ -70,8 +64,6 @@ const remove = async (req, res, next) => {
     validateReqParams(req)
 
     const category = await categoryService.remove(id, user_id)
-    if (!category) throw new Error('Category not found', { cause: '404' })
-
     return res.send(category)
   } catch (err) {
     return next(err)
@@ -83,11 +75,7 @@ const getRecordsByCategoryId = async (req, res, next) => {
   const { user_id } = res.locals
 
   try {
-    const category = await categoryService.getById(id, user_id)
-    if (!category) throw new Error('Category not found', { cause: '404' })
-
     const records = await categoryService.getRecordsByCategoryId(id, user_id)
-
     return res.send(records)
   } catch (err) {
     return next(err)
