@@ -7,7 +7,7 @@ const userAuthMiddleware = async (req, res, next) => {
     res.locals.user_id = payload.sub
     next()
   } catch (err) {
-    next(new Error(`Unauthorized: ${err.message}`, { cause: '401' }))
+    next(err)
   }
 }
 
