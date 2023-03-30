@@ -18,7 +18,7 @@ router.get(
 )
 
 router.post(
-  '/create',
+  '/',
   body('name')
     .exists().withMessage('Field "name" is required.')
     .notEmpty().withMessage('Field "name" cannot be empty.'),
@@ -26,13 +26,13 @@ router.post(
 )
 
 router.patch(
-  '/update/:id',
+  '/:id',
   param('id').isNumeric().withMessage('Param "id" must be an integer.'),
   categoryController.update
 )
 
 router.delete(
-  '/remove/:id',
+  '/:id',
   param('id').isNumeric().withMessage('Param "id" must be an integer.'),
   categoryController.remove
 )

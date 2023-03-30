@@ -19,7 +19,7 @@ router.get(
 )
 
 router.post(
-  '/create',
+  '/',
   body('content')
     .exists().withMessage('Field "content" is required.')
     .notEmpty().withMessage('Field "content" cannot be empty.'),
@@ -30,7 +30,7 @@ router.post(
 )
 
 router.patch(
-  '/update/:id',
+  '/:id',
   param('id')
     .isNumeric().withMessage('Param "id" must be an integer.'),
   body('record_id')
@@ -39,7 +39,7 @@ router.patch(
 )
 
 router.delete(
-  '/remove/:id',
+  '/:id',
   param('id')
     .isNumeric().withMessage('Param "id" must be an integer.'),
   refsController.remove
